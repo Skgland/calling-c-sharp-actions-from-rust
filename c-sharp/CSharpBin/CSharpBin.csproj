@@ -21,16 +21,40 @@
     <Exec Command="cargo build           --manifest-path=../../rust-lib/Cargo.toml" Condition="'$(Configuration)' == 'Debug'" />
     <!-- https://stackoverflow.com/a/48714896/7847252 -->
     <ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
-      <Content Include="../../rust-lib/target/release/rust_lib.dll" CopyToOutputDirectory="PreserveNewest" LinkBase="release" Condition="'$(Configuration)' == 'Release'" />
-      <Content Include="../../rust-lib/target/debug/rust_lib.dll" CopyToOutputDirectory="PreserveNewest" LinkBase="debug" Condition="'$(Configuration)' == 'Debug'" />
+      <Content
+        Include="../../rust-lib/target/release/rust_lib.dll"
+        TargetPath="rust_lib.dll"
+        CopyToOutputDirectory="PreserveNewest"
+        Condition="'$(Configuration)' == 'Release'" />
+      <Content
+        Include="../../rust-lib/target/debug/rust_lib.dll"
+        TargetPath="rust_lib.dll"
+        CopyToOutputDirectory="PreserveNewest"
+        Condition="'$(Configuration)' == 'Debug'" />
     </ItemGroup>
     <ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
-      <Content Include="../../rust-lib/target/release/rust_lib.so" CopyToOutputDirectory="PreserveNewest" LinkBase="release" Condition="'$(Configuration)' == 'Release'" />
-      <Content Include="../../rust-lib/target/debug/rust_lib.so" CopyToOutputDirectory="PreserveNewest" LinkBase="debug" Condition="'$(Configuration)' == 'Debug'" />
+      <Content
+        Include="../../rust-lib/target/release/librust_lib.so"
+        TargetPath="librust_lib.so"
+        CopyToOutputDirectory="PreserveNewest"
+        Condition="'$(Configuration)' == 'Release'" />
+      <Content
+        Include="../../rust-lib/target/debug/librust_lib.so"
+        TargetPath="librust_lib.so"
+        CopyToOutputDirectory="PreserveNewest"
+        Condition="'$(Configuration)' == 'Debug'" />
     </ItemGroup>
     <ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' ">
-      <Content Include="../../rust-lib/target/release/rust_lib.dylib" CopyToOutputDirectory="PreserveNewest" LinkBase="release" Condition="'$(Configuration)' == 'Release'" />
-      <Content Include="../../rust-lib/target/debug/rust_lib.dylib" CopyToOutputDirectory="PreserveNewest" LinkBase="debug" Condition="'$(Configuration)' == 'Debug'" />
+      <Content
+        Include="../../rust-lib/target/release/rust_lib.dylib"
+        TargetPath="rust_lib.dylib"
+        CopyToOutputDirectory="PreserveNewest"
+        Condition="'$(Configuration)' == 'Release'" />
+      <Content
+        Include="../../rust-lib/target/debug/rust_lib.dylib"
+        TargetPath="rust_lib.dylib"
+        CopyToOutputDirectory="PreserveNewest"
+        Condition="'$(Configuration)' == 'Debug'" />
     </ItemGroup>
   </Target>
 </Project>
