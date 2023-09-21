@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build Release",
-            "program": "${workspaceFolder}/c-sharp/CSharpBin/bin/Debug/net7.0/CSharpBin.dll",
+            "program": "${workspaceFolder}/c-sharp/CSharpBin/bin/Release/net7.0/CSharpBin.dll",
             "args": [],
             "cwd": "${workspaceFolder}/c-sharp/CSharpBin",
             "console": "internalConsole",
