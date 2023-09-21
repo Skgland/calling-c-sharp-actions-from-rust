@@ -24,7 +24,23 @@
         Condition="'$(Configuration)' == 'Release'">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <Content Include="../../rust-lib/target/release/rust_lib.so"
+        Condition="'$(Configuration)' == 'Release'">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="../../rust-lib/target/release/rust_lib.dylib"
+        Condition="'$(Configuration)' == 'Release'">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
       <Content Include="../../rust-lib/target/debug/rust_lib.dll"
+        Condition="'$(Configuration)' == 'Debug'">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="../../rust-lib/target/debug/rust_lib.so"
+        Condition="'$(Configuration)' == 'Debug'">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="../../rust-lib/target/debug/rust_lib.dylib"
         Condition="'$(Configuration)' == 'Debug'">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
