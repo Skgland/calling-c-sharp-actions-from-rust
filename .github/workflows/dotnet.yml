@@ -24,6 +24,8 @@ jobs:
         components: rustfmt, clippy
     - name: Cache dependencies
       uses: Swatinem/rust-cache@v2.2.1
+      with:
+        workspace: "rust-lib"
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
