@@ -7,17 +7,27 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  
-  <Target Name="GenerateRustDll" BeforeTargets="BeforeBuild">
-      <Exec Command="cargo build --release --manifest-path=..\..\rust-lib\Cargo.toml" Condition="'$(Configuration)' == 'Release'" />
-      <Exec Command="cargo build           --manifest-path=..\..\rust-lib\Cargo.toml" Condition="'$(Configuration)' == 'Debug'"/>
-      <ItemGroup >
-        <Content Include="..\..\rust-lib\target\release\rust_lib.dll" Condition="'$(Configuration)' == 'Release'">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\..\rust-lib\target\debug\rust_lib.dll" Condition="'$(Configuration)' == 'Debug'">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
+
+  <Target Name="GenerateRustDll" BeforeTargets="BeforeCompile">
+    <Exec Command="cargo build --release --manifest-path=../../rust-lib/Cargo.toml"
+      Condition="'$(Configuration)' == 'Release'" />
+    <Exec Command="cargo build           --manifest-path=../../rust-lib/Cargo.toml"
+      Condition="'$(Configuration)' == 'Debug'" />
+    <PropertyGroup>
+      <GeneratedFilePath>../../rust-lib/dotnet/NativeMethods.g.cs</GeneratedFilePath>
+    </PropertyGroup>
+    <ItemGroup>
+      <Compile Include="$(GeneratedFilePath)" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="../../rust-lib/target/release/rust_lib.dll"
+        Condition="'$(Configuration)' == 'Release'">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="../../rust-lib/target/debug/rust_lib.dll"
+        Condition="'$(Configuration)' == 'Debug'">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
   </Target>
 </Project>
