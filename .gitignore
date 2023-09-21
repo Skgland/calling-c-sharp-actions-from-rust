@@ -1,5 +1,4 @@
 target/
 bin/
 obj/
-.vscode/
 c-sharp/CSharpBin/NativeMethods.g.cs

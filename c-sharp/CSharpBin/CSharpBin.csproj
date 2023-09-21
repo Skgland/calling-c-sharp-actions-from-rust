@@ -7,10 +7,19 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <Target Name="GenerateRustDll" BeforeTargets="BeforeBuild">
-    <Exec Command="cargo build --release --manifest-path=..\..\rust-lib\Cargo.toml" />
+  
+  <Target Name="GenerateRustDll" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' == 'Release'">
+      <Exec Command="cargo build --release --manifest-path=..\..\rust-lib\Cargo.toml" />
+      <ItemGroup>
+        <Content Include="..\..\rust-lib\target\release\rust_lib.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+      </ItemGroup>
+  </Target>
+  <Target Name="GenerateRustDll" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' == 'Debug'">
+    <Exec Command="cargo build --manifest-path=..\..\rust-lib\Cargo.toml" />
     <ItemGroup>
-      <Content Include="..\..\rust-lib\target\release\rust_lib.dll">
+      <Content Include="..\..\rust-lib\target\debug\rust_lib.dll">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
