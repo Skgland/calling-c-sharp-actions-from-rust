@@ -7,17 +7,54 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  
+
+  <Target Name="CompileGenerated" BeforeTargets="BeforeCompile" AfterTargets="GenerateRustDll">
+    <PropertyGroup>
+      <GeneratedFilePath>../../rust-lib/dotnet/NativeMethods.g.cs</GeneratedFilePath>
+    </PropertyGroup>
+    <ItemGroup>
+      <Compile Include="$(GeneratedFilePath)" />
+    </ItemGroup>
+  </Target>
   <Target Name="GenerateRustDll" BeforeTargets="BeforeBuild">
-      <Exec Command="cargo build --release --manifest-path=..\..\rust-lib\Cargo.toml" Condition="'$(Configuration)' == 'Release'" />
-      <Exec Command="cargo build           --manifest-path=..\..\rust-lib\Cargo.toml" Condition="'$(Configuration)' == 'Debug'"/>
-      <ItemGroup >
-        <Content Include="..\..\rust-lib\target\release\rust_lib.dll" Condition="'$(Configuration)' == 'Release'">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\..\rust-lib\target\debug\rust_lib.dll" Condition="'$(Configuration)' == 'Debug'">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-      </ItemGroup>
+    <Exec Command="cargo build --release --manifest-path=../../rust-lib/Cargo.toml" Condition="'$(Configuration)' == 'Release'" />
+    <Exec Command="cargo build           --manifest-path=../../rust-lib/Cargo.toml" Condition="'$(Configuration)' == 'Debug'" />
+    <!-- https://stackoverflow.com/a/48714896/7847252 -->
+    <ItemGroup Condition=" '$(OS)' == 'Windows_NT' ">
+      <Content
+        Include="../../rust-lib/target/release/rust_lib.dll"
+        TargetPath="rust_lib.dll"
+        CopyToOutputDirectory="PreserveNewest"
+        Condition="'$(Configuration)' == 'Release'" />
+      <Content
+        Include="../../rust-lib/target/debug/rust_lib.dll"
+        TargetPath="rust_lib.dll"
+        CopyToOutputDirectory="PreserveNewest"
+        Condition="'$(Configuration)' == 'Debug'" />
+    </ItemGroup>
+    <ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+      <Content
+        Include="../../rust-lib/target/release/librust_lib.so"
+        TargetPath="librust_lib.so"
+        CopyToOutputDirectory="PreserveNewest"
+        Condition="'$(Configuration)' == 'Release'" />
+      <Content
+        Include="../../rust-lib/target/debug/librust_lib.so"
+        TargetPath="librust_lib.so"
+        CopyToOutputDirectory="PreserveNewest"
+        Condition="'$(Configuration)' == 'Debug'" />
+    </ItemGroup>
+    <ItemGroup Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' ">
+      <Content
+        Include="../../rust-lib/target/release/rust_lib.dylib"
+        TargetPath="rust_lib.dylib"
+        CopyToOutputDirectory="PreserveNewest"
+        Condition="'$(Configuration)' == 'Release'" />
+      <Content
+        Include="../../rust-lib/target/debug/rust_lib.dylib"
+        TargetPath="rust_lib.dylib"
+        CopyToOutputDirectory="PreserveNewest"
+        Condition="'$(Configuration)' == 'Debug'" />
+    </ItemGroup>
   </Target>
 </Project>

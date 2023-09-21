@@ -1,4 +1,4 @@
 target/
 bin/
 obj/
-c-sharp/CSharpBin/NativeMethods.g.cs
+rust-lib/dotnet/
