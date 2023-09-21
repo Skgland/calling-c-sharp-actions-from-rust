@@ -34,3 +34,7 @@ jobs:
       run: dotnet build ./c-sharp/CSharpBin.sln --no-restore 
     - name: Test
       run: dotnet test ./c-sharp/CSharpBin.sln --no-build --verbosity normal
+    - name: Set Executable bit
+      run: chmod +x ./c-sharp/CSharpBin/bin/Debug/net7.0/CSharpBin
+    - name: Run
+      run: cd ./c-sharp/CSharpBin/bin/Debug/net7.0/ && ./CSharpBin
