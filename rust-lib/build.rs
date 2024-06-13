@@ -4,6 +4,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     csbindgen::Builder::default()
         .input_extern_file("src/c_sharp.rs")
         .csharp_dll_name("rust_lib")
+        .always_included_types(["SuccessAction"])
         .generate_csharp_file(concat!(
             env!("CARGO_MANIFEST_DIR"),
             "/dotnet/NativeMethods.g.cs"

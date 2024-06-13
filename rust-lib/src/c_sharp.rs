@@ -68,10 +68,41 @@ macro_rules! impl_ffi_safe {
 
 impl_ffi_safe!(u8, i8, u16, i16, u32, i32, u64, i64);
 
-type SuccessAction = RustDelegate<unsafe extern "C" fn(GCHandlePtr)>;
-type FailureAction = RustDelegate<unsafe extern "C" fn(GCHandlePtr, i32)>;
-type Function = RustDelegate<unsafe extern "C" fn(GCHandlePtr) -> u8>;
-type OtherAction = RustDelegate<unsafe extern "C" fn(GCHandlePtr, i32, u8)>;
+// can't use the macro to generate the struct as well, as then csbindgen won't find the struct definition and skip the definition in C#
+macro_rules! delegate {
+    ($name:ident ($($tys:ty),*) $(->  $ret:ty)?) => {
+        impl std::ops::Deref for $name {
+            type Target = RustDelegate<unsafe extern "C" fn(GCHandlePtr, $($tys),*) $(-> $ret)?>;
+            fn deref(&self) -> &Self::Target {
+                &self.rust_delegate
+            }
+        }
+    };
+}
+
+delegate!(SuccessAction());
+#[repr(transparent)]
+pub struct SuccessAction {
+    rust_delegate: RustDelegate<unsafe extern "C" fn(GCHandlePtr)>,
+}
+
+delegate!(FailureAction(i32));
+#[repr(transparent)]
+pub struct FailureAction {
+    rust_delegate: RustDelegate<unsafe extern "C" fn(GCHandlePtr, i32)>,
+}
+
+delegate!(Function()->u8);
+#[repr(transparent)]
+pub struct Function {
+    rust_delegate: RustDelegate<unsafe extern "C" fn(GCHandlePtr) -> u8>,
+}
+
+delegate!(OtherAction(i32, u8));
+#[repr(transparent)]
+pub struct OtherAction {
+    rust_delegate: RustDelegate<unsafe extern "C" fn(GCHandlePtr, i32, u8)>,
+}
 
 /*
 success must be a GCHandle to an

@@ -124,13 +124,57 @@ namespace CsBindgen
         }
     }
 
+    internal unsafe partial struct SuccessAction
+    {
+        public static implicit operator SuccessAction(Action action)
+        {
+            return new SuccessAction
+            {
+                rust_delegate = RustDelegate.Create(action)
+            };
+        }
+    }
+
+    internal unsafe partial struct FailureAction
+    {
+        public static implicit operator FailureAction(Action<int> action)
+        {
+            return new FailureAction
+            {
+                rust_delegate = RustDelegate.Create(action)
+            };
+        }
+    }
+
+    internal unsafe partial struct OtherAction
+    {
+        public static implicit operator OtherAction(Action<int, byte> action)
+        {
+            return new OtherAction
+            {
+                rust_delegate = RustDelegate.Create(action)
+            };
+        }
+    }
+
+    internal unsafe partial struct Function
+    {
+        public static implicit operator Function(Func<byte> action)
+        {
+            return new Function
+            {
+                rust_delegate = RustDelegate.Create(action)
+            };
+        }
+    }
+
     public static class NativeBindings
     {
         public static void CallRust(Action success, Action<int> fail, Func<byte> fun, Action<int, byte> other)
         {
             unsafe
             {
-                NativeMethods.fun_with_callbacks(RustDelegate.Create(success), RustDelegate.Create(fail), RustDelegate.Create(fun), RustDelegate.Create(other));
+                NativeMethods.fun_with_callbacks(success, fail, fun, other);
             }
         }
     }
