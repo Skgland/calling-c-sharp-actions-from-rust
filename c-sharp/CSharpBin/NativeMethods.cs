@@ -28,26 +28,38 @@ namespace CsBindgen
         }
     }
 
-    internal unsafe partial struct RustAction
+    internal unsafe partial struct RustDelegate
     {
-        public static unsafe RustAction Create(Action action)
+        public static unsafe RustDelegate Create(Action action)
         {
 
             unsafe
             {
-                return new RustAction
+                return new RustDelegate
                 {
                     handle = RustGCHandle.Allocate(action),
                     callback = (IntPtr)GetCallback(action),
                 };
             }
         }
+        public static unsafe RustDelegate Create<R>(Func<R> func)
+        {
 
-        public static unsafe RustAction Create<T>(Action<T> action)
+            unsafe
+            {
+                return new RustDelegate
+                {
+                    handle = RustGCHandle.Allocate(func),
+                    callback = (IntPtr)GetCallback((dynamic)func),
+                };
+            }
+        }
+
+        public static unsafe RustDelegate Create<T>(Action<T> action)
         {
             unsafe
             {
-                return new RustAction
+                return new RustDelegate
                 {
                     handle = RustGCHandle.Allocate(action),
                     callback = (IntPtr)GetCallback((dynamic)action),
@@ -55,11 +67,11 @@ namespace CsBindgen
             }
         }
 
-        public static unsafe RustAction Create<T1, T2>(Action<T1, T2> action)
+        public static unsafe RustDelegate Create<T1, T2>(Action<T1, T2> action)
         {
             unsafe
             {
-                return new RustAction
+                return new RustDelegate
                 {
                     handle = RustGCHandle.Allocate(action),
                     callback = (IntPtr)GetCallback((dynamic)action),
@@ -73,6 +85,17 @@ namespace CsBindgen
             static void ActionCallback(nint ptr)
             {
                 (GCHandle.FromIntPtr(ptr).Target as Action)!.Invoke();
+            }
+
+            return &ActionCallback;
+        }
+
+        private static unsafe delegate* unmanaged[Cdecl]<nint, byte> GetCallback(Func<byte> action)
+        {
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static byte ActionCallback(nint ptr)
+            {
+                return (GCHandle.FromIntPtr(ptr).Target as Func<byte>)!.Invoke();
             }
 
             return &ActionCallback;
@@ -103,11 +126,11 @@ namespace CsBindgen
 
     public static class NativeBindings
     {
-        public static void CallRust(Action success, Action<int> fail, Action<int, byte> other)
+        public static void CallRust(Action success, Action<int> fail, Func<byte> fun, Action<int, byte> other)
         {
             unsafe
             {
-                NativeMethods.fun_with_callbacks(RustAction.Create(success), RustAction.Create(fail), RustAction.Create(other));
+                NativeMethods.fun_with_callbacks(RustDelegate.Create(success), RustDelegate.Create(fail), RustDelegate.Create(fun), RustDelegate.Create(other));
             }
         }
     }

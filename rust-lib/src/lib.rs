@@ -1,6 +1,11 @@
 mod c_sharp;
 
-pub fn normal_rust_fn<S: Fn(), F: Fn(i32), O: Fn(i32, u8)>(success: S, failure: F, other: O) {
+pub fn normal_rust_fn<S: Fn(), F: Fn(i32), Fun: Fn() -> u8, O: Fn(i32, u8)>(
+    success: S,
+    failure: F,
+    fun: Fun,
+    other: O,
+) {
     println!("Rust says hi!");
 
     let value = rand::random();
@@ -10,5 +15,5 @@ pub fn normal_rust_fn<S: Fn(), F: Fn(i32), O: Fn(i32, u8)>(success: S, failure: 
         failure(value);
     }
 
-    other(value, 42);
+    other(value, fun());
 }
