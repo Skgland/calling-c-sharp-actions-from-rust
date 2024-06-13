@@ -79,7 +79,7 @@ namespace CsBindgen
             }
         }
 
-        private static unsafe delegate* unmanaged[Cdecl]<nint, void> GetCallback(Action action)
+        private static delegate* unmanaged[Cdecl]<nint, void> GetCallback(Action action)
         {
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void ActionCallback(nint ptr)
@@ -90,7 +90,7 @@ namespace CsBindgen
             return &ActionCallback;
         }
 
-        private static unsafe delegate* unmanaged[Cdecl]<nint, byte> GetCallback(Func<byte> action)
+        private static delegate* unmanaged[Cdecl]<nint, byte> GetCallback(Func<byte> action)
         {
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static byte ActionCallback(nint ptr)
@@ -101,7 +101,7 @@ namespace CsBindgen
             return &ActionCallback;
         }
 
-        private static unsafe delegate* unmanaged[Cdecl]<nint, int, void> GetCallback(Action<int> action)
+        private static delegate* unmanaged[Cdecl]<nint, int, void> GetCallback(Action<int> action)
         {
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void ActionCallback(nint ptr, int val)
@@ -112,7 +112,7 @@ namespace CsBindgen
             return &ActionCallback;
         }
 
-        private static unsafe delegate* unmanaged[Cdecl]<nint, int, byte, void> GetCallback(Action<int, byte> action)
+        private static delegate* unmanaged[Cdecl]<nint, int, byte, void> GetCallback(Action<int, byte> action)
         {
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void ActionCallback(nint ptr, int v1, byte v2)
