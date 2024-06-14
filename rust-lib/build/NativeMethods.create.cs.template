@@ -1,0 +1,18 @@
+        public static unsafe RustDelegate Create(@@kind@@ internal_delegate)
+        {
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static @@callback-return@@ Internal__ActionCallback(nint internal__ptr @@callback-pattern-types@@)
+            {
+                @@return@@ (GCHandle.FromIntPtr(internal__ptr).Target as @@kind@@)!.Invoke(@@callback-args@@);
+            }
+
+            unsafe
+            {
+                return new RustDelegate
+                {
+                    handle = RustGCHandle.Allocate(internal_delegate),
+                    callback = (IntPtr)(delegate* unmanaged[Cdecl]<nint @@callback-types@@, @@callback-return@@>)&Internal__ActionCallback,
+                };
+            }
+        }

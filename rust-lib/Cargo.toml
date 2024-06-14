@@ -2,13 +2,15 @@
 name = "rust-lib"
 version = "0.1.0"
 edition = "2021"
+build = "build/main.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
 crate-type = ["cdylib"]
 
-[build-dependencies]
-csbindgen = "1.9.1"
-
 [dependencies]
 rand = { version = "*" }
+
+[build-dependencies]
+csbindgen = "1.9.1"
+syn = { version = "2.0.66", features = ["full", "extra-traits"] }

@@ -24,7 +24,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf70eb656f35e0e6956cbde31c66431c53d8a546823489719099c71525767a9c"
 dependencies = [
  "regex",
- "syn",
+ "syn 1.0.109",
 ]
 
 [[package]]
@@ -139,6 +139,7 @@ version = "0.1.0"
 dependencies = [
  "csbindgen",
  "rand",
+ "syn 2.0.66",
 ]
 
 [[package]]
@@ -146,6 +147,17 @@ name = "syn"
 version = "1.0.109"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72b64191b275b66ffe2469e8af2c1cfe3bafa67b529ead792a6d0160888b4237"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "unicode-ident",
+]
+
+[[package]]
+name = "syn"
+version = "2.0.66"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c42f3f41a2de00b01c0aaad383c5a45241efc8b2d1eda5661812fda5f3cdcff5"
 dependencies = [
  "proc-macro2",
  "quote",

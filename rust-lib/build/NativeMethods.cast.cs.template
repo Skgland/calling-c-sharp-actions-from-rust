@@ -1,0 +1,10 @@
+    internal unsafe partial struct @@type@@
+    {
+        public static implicit operator @@type@@(@@kind@@ internal_delegate)
+        {
+            return new @@type@@
+            {
+                rust_delegate = RustDelegate.Create(internal_delegate)
+            };
+        }
+    }

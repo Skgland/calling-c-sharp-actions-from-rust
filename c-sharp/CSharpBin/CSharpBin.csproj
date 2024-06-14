@@ -10,7 +10,7 @@
 
   <Target Name="CompileGenerated" BeforeTargets="BeforeCompile" AfterTargets="GenerateRustDll">
     <PropertyGroup>
-      <GeneratedFilePath>../../rust-lib/dotnet/NativeMethods.g.cs</GeneratedFilePath>
+      <GeneratedFilePath>../../rust-lib/dotnet/NativeMethods.g*.cs</GeneratedFilePath>
     </PropertyGroup>
     <ItemGroup>
       <Compile Include="$(GeneratedFilePath)" />
