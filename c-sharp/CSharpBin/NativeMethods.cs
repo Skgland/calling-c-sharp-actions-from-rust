@@ -32,76 +32,23 @@ namespace CsBindgen
     {
         public static unsafe RustDelegate Create(Action action)
         {
-
-            unsafe
-            {
-                return new RustDelegate
-                {
-                    handle = RustGCHandle.Allocate(action),
-                    callback = (IntPtr)GetCallback(action),
-                };
-            }
-        }
-        public static unsafe RustDelegate Create<R>(Func<R> func)
-        {
-
-            unsafe
-            {
-                return new RustDelegate
-                {
-                    handle = RustGCHandle.Allocate(func),
-                    callback = (IntPtr)GetCallback((dynamic)func),
-                };
-            }
-        }
-
-        public static unsafe RustDelegate Create<T>(Action<T> action)
-        {
-            unsafe
-            {
-                return new RustDelegate
-                {
-                    handle = RustGCHandle.Allocate(action),
-                    callback = (IntPtr)GetCallback((dynamic)action),
-                };
-            }
-        }
-
-        public static unsafe RustDelegate Create<T1, T2>(Action<T1, T2> action)
-        {
-            unsafe
-            {
-                return new RustDelegate
-                {
-                    handle = RustGCHandle.Allocate(action),
-                    callback = (IntPtr)GetCallback((dynamic)action),
-                };
-            }
-        }
-
-        private static delegate* unmanaged[Cdecl]<nint, void> GetCallback(Action action)
-        {
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void ActionCallback(nint ptr)
             {
                 (GCHandle.FromIntPtr(ptr).Target as Action)!.Invoke();
             }
 
-            return &ActionCallback;
-        }
-
-        private static delegate* unmanaged[Cdecl]<nint, byte> GetCallback(Func<byte> action)
-        {
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
-            static byte ActionCallback(nint ptr)
+            unsafe
             {
-                return (GCHandle.FromIntPtr(ptr).Target as Func<byte>)!.Invoke();
+                return new RustDelegate
+                {
+                    handle = RustGCHandle.Allocate(action),
+                    callback = (IntPtr)(delegate* unmanaged[Cdecl]<nint, void>)&ActionCallback,
+                };
             }
-
-            return &ActionCallback;
         }
 
-        private static delegate* unmanaged[Cdecl]<nint, int, void> GetCallback(Action<int> action)
+        public static unsafe RustDelegate Create(Action<int> action)
         {
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void ActionCallback(nint ptr, int val)
@@ -109,10 +56,17 @@ namespace CsBindgen
                 (GCHandle.FromIntPtr(ptr).Target as Action<int>)!.Invoke(val);
             }
 
-            return &ActionCallback;
+            unsafe
+            {
+                return new RustDelegate
+                {
+                    handle = RustGCHandle.Allocate(action),
+                    callback = (IntPtr)(delegate* unmanaged[Cdecl]<nint, int, void>)&ActionCallback,
+                };
+            }
         }
 
-        private static delegate* unmanaged[Cdecl]<nint, int, byte, void> GetCallback(Action<int, byte> action)
+        public static unsafe RustDelegate Create(Action<int, byte> action)
         {
             [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void ActionCallback(nint ptr, int v1, byte v2)
@@ -120,7 +74,33 @@ namespace CsBindgen
                 (GCHandle.FromIntPtr(ptr).Target as Action<int, byte>)!.Invoke(v1, v2);
             }
 
-            return &ActionCallback;
+            unsafe
+            {
+                return new RustDelegate
+                {
+                    handle = RustGCHandle.Allocate(action),
+                    callback = (IntPtr)(delegate* unmanaged[Cdecl]<nint, int, byte, void>)&ActionCallback,
+                };
+            }
+        }
+
+        public static unsafe RustDelegate Create(Func<byte> func)
+        {
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static byte ActionCallback(nint ptr)
+            {
+                return (GCHandle.FromIntPtr(ptr).Target as Func<byte>)!.Invoke();
+            }
+
+            unsafe
+            {
+                return new RustDelegate
+                {
+                    handle = RustGCHandle.Allocate(func),
+                    callback = (IntPtr)(delegate* unmanaged[Cdecl]<nint, byte>)&ActionCallback,
+                };
+            }
         }
     }
 
